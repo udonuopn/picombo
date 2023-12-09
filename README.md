@@ -1,5 +1,5 @@
 ## pypeco
-Pythonでpecoする。
+PercolやPecoの車輪の再発明的なもの。
 
 ## デモ
 ```
