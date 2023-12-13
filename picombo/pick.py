@@ -105,21 +105,27 @@ class PickWindow:
             self._result_control.text = to_formatted_text([])
 
     def _move_cursor_down(self, event: KeyPressEvent):
-        max_page = len(self._current_results) // self._page_size
+        max_page, last_page_size = divmod(len(self._current_results), self._page_size)
         if self._current_results:
-            self._selected_index = self._selected_index + 1
-            if self._selected_index > self._page_size - 1 and self._current_page < max_page:
-                self._current_page += 1
-                self._selected_index = 0
-            self._update_result_area()
+            if self._current_page == max_page and self._selected_index == last_page_size - 1:
+                pass
+            else:
+                self._selected_index = self._selected_index + 1
+                if self._selected_index > self._page_size - 1 and self._current_page < max_page:
+                    self._current_page += 1
+                    self._selected_index = 0
+                self._update_result_area()
 
     def _move_cursor_up(self, event: KeyPressEvent):
         if self._current_results:
-            self._selected_index = self._selected_index - 1
-            if self._selected_index < 0 and self._current_page > 0:
-                self._current_page -= 1
-                self._selected_index = self._page_size - 1
-            self._update_result_area()
+            if self._selected_index == 0 and self._current_page == 0:
+                pass
+            else:
+                self._selected_index = self._selected_index - 1
+                if self._selected_index < 0 and self._current_page > 0:
+                    self._current_page -= 1
+                    self._selected_index = self._page_size - 1
+                self._update_result_area()
 
     def _select_item(self, event: KeyPressEvent):
         if self._current_results:
