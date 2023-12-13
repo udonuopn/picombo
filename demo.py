@@ -1,6 +1,6 @@
 #!/bin/env python
 
-from main import SearchWindow
+import picombo
 
 
 def read_demo_list():
@@ -13,6 +13,6 @@ def read_demo_list():
 
 if __name__ == '__main__':
     search_items = read_demo_list()
-    sw = SearchWindow(search_items)
-    result = sw.search()
+    pw = picombo.PickWindow(search_items)
+    result = pw.search()
     print(result)

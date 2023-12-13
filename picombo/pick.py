@@ -15,7 +15,7 @@ from prompt_toolkit.formatted_text import to_formatted_text
 
 
 @dataclass
-class SearchWindow:
+class PickWindow:
     search_items: Optional[List[Any]]
     _input_field: TextArea = field(init=False, default=TextArea(prompt='', height=1)) # 検索バー
     _result_window: Window = field(init=False, default=None) # 結果表示のウィンドウ
@@ -70,6 +70,7 @@ class SearchWindow:
     def _get_formatted_text(self, item, keywords, selected=False):
         tokens = []
         last_idx = 0
+        item = str(item)
         for keyword in keywords:
             start_idx = item.lower().find(keyword.lower(), last_idx)
             if start_idx >= 0:
@@ -104,21 +105,27 @@ class SearchWindow:
             self._result_control.text = to_formatted_text([])
 
     def _move_cursor_down(self, event: KeyPressEvent):
-        max_page = len(self._current_results) // self._page_size
+        max_page, last_page_size = divmod(len(self._current_results), self._page_size)
         if self._current_results:
-            self._selected_index = self._selected_index + 1
-            if self._selected_index > self._page_size - 1 and self._current_page < max_page:
-                self._current_page += 1
-                self._selected_index = 0
-            self._update_result_area()
+            if self._current_page == max_page and self._selected_index == last_page_size - 1:
+                pass
+            else:
+                self._selected_index = self._selected_index + 1
+                if self._selected_index > self._page_size - 1 and self._current_page < max_page:
+                    self._current_page += 1
+                    self._selected_index = 0
+                self._update_result_area()
 
     def _move_cursor_up(self, event: KeyPressEvent):
         if self._current_results:
-            self._selected_index = self._selected_index - 1
-            if self._selected_index < 0 and self._current_page > 0:
-                self._current_page -= 1
-                self._selected_index = self._page_size - 1
-            self._update_result_area()
+            if self._selected_index == 0 and self._current_page == 0:
+                pass
+            else:
+                self._selected_index = self._selected_index - 1
+                if self._selected_index < 0 and self._current_page > 0:
+                    self._current_page -= 1
+                    self._selected_index = self._page_size - 1
+                self._update_result_area()
 
     def _select_item(self, event: KeyPressEvent):
         if self._current_results:
