@@ -15,7 +15,7 @@ from prompt_toolkit.formatted_text import to_formatted_text
 
 
 @dataclass
-class SearchWindow:
+class PickWindow:
     search_items: Optional[List[Any]]
     _input_field: TextArea = field(init=False, default=TextArea(prompt='', height=1)) # 検索バー
     _result_window: Window = field(init=False, default=None) # 結果表示のウィンドウ
@@ -70,6 +70,7 @@ class SearchWindow:
     def _get_formatted_text(self, item, keywords, selected=False):
         tokens = []
         last_idx = 0
+        item = str(item)
         for keyword in keywords:
             start_idx = item.lower().find(keyword.lower(), last_idx)
             if start_idx >= 0:
