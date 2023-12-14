@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "picombo"
-version = "0.1.1"
+version = "1.0.0"
 description = "Users select an item from a list and retrieve it."
 readme = "README.md"
 authors = [{name = "Udon Asakawa", email = "udonuopn.a@gmail.com"}]
