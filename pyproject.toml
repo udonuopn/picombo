@@ -19,8 +19,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-package_dir = {"": "src"}
-packages = find_namespace:
+package-dir = {"" = "src"}
 
 [project.urls]
 homepage = "https://github.com/udonuopn/picombo"
