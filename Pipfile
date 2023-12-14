@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+prompt-toolkit = "*"
+
+[dev-packages]
+pytest = "*"
+twine = "*"
+wheel = "*"
+
+[requires]
+python_version = "3.10"
+
+[scripts]
+build = "pipenv run python setup.py sdist bdist_wheel"
+demo = "pipenv run python demo.py"
+test = "pytest -vv"
+upload = "twine upload dist/*"
+upload-test = "twine upload --repository testpypi dist/*"
