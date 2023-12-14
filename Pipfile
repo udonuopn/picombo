@@ -7,16 +7,15 @@ name = "pypi"
 prompt-toolkit = "*"
 
 [dev-packages]
+build = "*"
 pytest = "*"
 twine = "*"
-wheel = "*"
 
 [requires]
 python_version = "3.10"
 
 [scripts]
-build = "pipenv run python setup.py sdist bdist_wheel"
-demo = "pipenv run python demo.py"
+build = "pipenv run python -m build"
 test = "pytest -vv"
 upload = "twine upload dist/*"
 upload-test = "twine upload --repository testpypi dist/*"
