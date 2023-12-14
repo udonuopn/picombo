@@ -9,8 +9,19 @@ In essence, it's like having Percol as a library that can be freely integrated i
 $ pip install picombo
 ```
 
-## Demonstration
-The following command filters a list of the names of all countries.
+## Example
+```
+import picombo
+
+my_list = [i for i in range(1,101)]
+pw = picombo.PickWindow(my_list)
+res = pw.search()
+
+print(res)
+```
+
+## Demo
+If you clone the repository, you can demo the filtering of a list of all country names.
 
 ```
 $ pipenv install
