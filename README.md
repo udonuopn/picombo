@@ -6,12 +6,13 @@ In essence, it's like having Percol as a library that can be freely integrated i
 ## Installation
 
 ```
-pip install picombo
+$ pip install picombo
 ```
 
 ## Demonstration
 The following command filters a list of the names of all countries.
 
 ```
-python demo.py
+$ pipenv install
+$ pipenv run demo
 ```
