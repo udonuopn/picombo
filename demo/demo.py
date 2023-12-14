@@ -1,11 +1,16 @@
 #!/bin/env python
 
-import picombo
+import sys
+from pathlib import Path
 
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root.joinpath("src")))
+
+import picombo
 
 def read_demo_list():
     items = []
-    with open('demo_list.txt', 'r') as f:
+    with open(Path(project_root.joinpath('demo', 'demo_list.txt')), 'r') as f:
         for i in f:
             items.append(i.strip())
     return items

@@ -18,5 +18,9 @@ dependencies = [
     "prompt-toolkit"
 ]
 
+[tool.setuptools]
+package_dir = {"": "src"}
+packages = find_namespace:
+
 [project.urls]
 homepage = "https://github.com/udonuopn/picombo"

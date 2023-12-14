@@ -16,6 +16,7 @@ python_version = "3.10"
 
 [scripts]
 build = "pipenv run python -m build"
+demo = "pipenv run python demo/demo.py"
 test = "pytest -vv"
 upload = "twine upload dist/*"
 upload-test = "twine upload --repository testpypi dist/*"
