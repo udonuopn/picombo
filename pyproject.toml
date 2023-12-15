@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "picombo"
-version = "1.0.0"
+version = "1.0.1"
 description = "Users select an item from a list and retrieve it."
 readme = "README.md"
 authors = [{name = "Udon Asakawa", email = "udonuopn.a@gmail.com"}]
@@ -13,7 +13,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.6"
 dependencies = [
     "prompt-toolkit"
 ]
