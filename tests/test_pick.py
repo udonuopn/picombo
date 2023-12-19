@@ -36,13 +36,14 @@ def test_move_cursor_down():
     assert pw._current_page == 1
 
     # カーソルが画面外まで進まないことを確認
+    pw = init_pw()
     count = len(items)
     while count != 0:
         count -= 1
         pw._move_cursor_down(None)
     print(pw._selected_index)
-    assert pw._selected_index == item_num % pw._page_size - 1
-    assert pw._current_page == item_num // pw._page_size
+    assert pw._selected_index == 0
+    assert pw._current_page == 0
 
 
 def test_move_cursor_up():
@@ -64,12 +65,10 @@ def test_move_cursor_up():
     assert pw._current_page == 0
 
     # カーソルが画面外まで戻らないことを確認
-    count = len(items)
-    while count != 0:
-        count -= 1
-        pw._move_cursor_up(None)
-    assert pw._selected_index == 0
-    assert pw._current_page == 0
+    pw = init_pw()
+    pw._move_cursor_up(None)
+    assert pw._selected_index == item_num % pw._page_size - 1
+    assert pw._current_page == item_num // pw._page_size
 
 
 def test_select_item():

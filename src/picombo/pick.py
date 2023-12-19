@@ -22,9 +22,10 @@ class PickWindow:
     _result_control: FormattedTextControl = field(init=False, default=FormattedTextControl()) # 結果表示のウィンドウのスタイル制御
     _current_results: Optional[List[Any]] = field(init=False, default_factory=list) # 現在の絞り込み結果
     _selected_index: int = field(init=False, default=0) # 絞り込み結果のリストの内、現在選択しているもののインデックス
-    _selected_item: Any = field(init=False, default=None) # 最終的に選択した項目
+    _filally_selected_item: Any = field(init=False, default=None) # 最終的に選択した項目
     _page_size: int = field(init=False, default=10)  # 1ページあたりの項目数
     _current_page: int = field(init=False, default=0)  # 現在のページ番号
+    _selection_decided: bool = field(init=False, default=False)  # 選択が決定されたかどうか
     _app: Application = field(init=False, default=None)
 
     def __post_init__(self):
@@ -53,6 +54,25 @@ class PickWindow:
         # アプリケーションの作成と実行
         self._app = Application(layout=layout, key_bindings=bindings, full_screen=True, style=style)
 
+    @property
+    def _max_page(self):
+        return len(self._current_results) // self._page_size
+
+    @property
+    def _last_page_size(self):
+        return len(self._current_results) % self._page_size
+
+    @property
+    def _absolute_selected_index(self):
+        return self._current_page * self._page_size + self._selected_index
+
+    @property
+    def _selected_item(self):
+        try:
+            return self._current_results[self._absolute_selected_index]
+        except IndexError:
+            return None
+
     # 絞り込んだリストを取得
     def _get_filtered_items(self, input_text):
         if not input_text.strip():
@@ -64,6 +84,9 @@ class PickWindow:
     # 絞り込み結果を更新
     def _update_search(self):
         self._current_results = self._get_filtered_items(self._input_field.text)
+        if not self._selected_item:
+            self._current_page = 0
+            self._selected_index = 0
         self._update_result_area()
 
     # 絞り込み結果からフォーマットしたテキストを生成
@@ -105,32 +128,32 @@ class PickWindow:
             self._result_control.text = to_formatted_text([])
 
     def _move_cursor_down(self, event: KeyPressEvent):
-        max_page, last_page_size = divmod(len(self._current_results), self._page_size)
         if self._current_results:
-            if self._current_page == max_page and self._selected_index == last_page_size - 1:
-                pass
+            if self._current_page == self._max_page and self._selected_index == self._last_page_size - 1:
+                self._current_page = 0
+                self._selected_index = 0
             else:
                 self._selected_index = self._selected_index + 1
-                if self._selected_index > self._page_size - 1 and self._current_page < max_page:
+                if self._selected_index > self._page_size - 1 and self._current_page < self._max_page:
                     self._current_page += 1
                     self._selected_index = 0
-                self._update_result_area()
+            self._update_result_area()
 
     def _move_cursor_up(self, event: KeyPressEvent):
         if self._current_results:
             if self._selected_index == 0 and self._current_page == 0:
-                pass
+                self._current_page = self._max_page
+                self._selected_index = self._last_page_size - 1
             else:
                 self._selected_index = self._selected_index - 1
                 if self._selected_index < 0 and self._current_page > 0:
                     self._current_page -= 1
                     self._selected_index = self._page_size - 1
-                self._update_result_area()
+            self._update_result_area()
 
     def _select_item(self, event: KeyPressEvent):
         if self._current_results:
-            absolute_selected_index = self._current_page * self._page_size + self._selected_index
-            self._selected_item = self._current_results[absolute_selected_index]
+            self._selection_decided = True
             event.app.exit()
 
     def _exit(self, event: KeyPressEvent):
@@ -139,4 +162,8 @@ class PickWindow:
     # 絞り込みの開始
     def search(self):
         self._app.run()
-        return self._selected_item
+        if self._selection_decided:
+            result = self._selected_item
+        else:
+            result = None
+        return result
